@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Венозный отток и речь ребёнка</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;600;700&family=Golos+Text:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #F7F3EE;
+  --ink: #1A1410;
+  --muted: #7A6E65;
+  --rule: #D8CFC6;
+  --red: #C0392B;
+  --red-light: rgba(192,57,43,0.08);
+  --blue: #1A4A7A;
+  --blue-light: rgba(26,74,122,0.08);
+  --green: #1A5C3A;
+  --green-light: rgba(26,92,58,0.08);
+  --amber: #B45309;
+  --card: #FFFFFF;
+  --shadow: 0 1px 4px rgba(26,20,16,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Golos Text', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* ── AUDIENCE TOGGLE ── */
+.audience-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0.5rem 1rem;
+}
+
+.aud-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-right: 1rem;
+  white-space: nowrap;
+}
+
+.aud-btn {
+  padding: 0.4rem 1.1rem;
+  border: 1px solid #3A3330;
+  background: transparent;
+  color: #A09890;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.aud-btn:first-of-type { border-radius: 2px 0 0 2px; }
+.aud-btn:last-of-type { border-radius: 0 2px 2px 0; border-left: none; }
+.aud-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* ── NAV ── */
+.sidenav {
+  position: fixed;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+}
+@media (max-width: 900px) { .sidenav { display: none; } }
+
+.snav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  opacity: 0.35;
+  transition: opacity .2s;
+}
+.snav-item:hover, .snav-item.active { opacity: 1; }
+.snav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ink);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.snav-item.active .snav-dot { transform: scale(1.7); background: var(--red); }
+.snav-text {
+  font-size: 0.7rem;
+  font-family: 'Unbounded', sans-serif;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+/* ── SECTIONS ── */
+.section {
+  min-height: 100vh;
+  padding: 8rem 2rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-inner { max-width: 820px; width: 100%; }
+
+.section-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.rule { width: 40px; height: 2px; background: var(--red); margin: 1.2rem 0; }
+
+.section p { color: var(--ink); margin-bottom: 1rem; max-width: 660px; }
+.section p.muted { color: var(--muted); font-size: 0.9rem; }
+
+/* ── HERO ── */
+#s0 {
+  background: var(--ink);
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 5rem;
+}
+
+#s0::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+#s0 .section-inner { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+#s0 h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
+  font-weight: 700;
+  color: #F7F3EE;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+
+#s0 h1 em {
+  font-style: normal;
+  color: var(--red);
+  display: block;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: #8A8078;
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-authors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #2A2420;
+  flex-wrap: wrap;
+}
+
+.author-tag {
+  text-align: center;
+}
+.author-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.7rem;
+  color: #F7F3EE;
+  font-weight: 600;
+}
+.author-role { font-size: 0.72rem; color: #5A5048; margin-top: 0.2rem; }
+
+.hero-divider { width: 1px; height: 40px; background: #2A2420; }
+
+.scroll-hint {
+  margin-top: 4rem;
+  font-size: 0.72rem;
+  color: #3A3330;
+  font-family: 'Unbounded', sans-serif;
+  letter-spacing: 0.1em;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ── STATS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.stat-cell {
+  background: var(--card);
+  padding: 1.4rem 1.2rem;
+}
+
+.stat-n {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--red);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.stat-l {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ── MECHANISM CHAIN ── */
+.chain {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.chain-step {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background .2s;
+  border-radius: 2px;
+  padding-left: 0.5rem;
+}
+.chain-step:hover { background: var(--red-light); }
+.chain-step:last-child { border-bottom: none; }
+
+.chain-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--rule);
+  line-height: 1;
+  min-width: 2rem;
+  padding-top: 0.2rem;
+}
+.chain-step.active .chain-num { color: var(--red); }
+
+.chain-title {
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.chain-detail {
+  font-size: 0.88rem;
+  color: var(--muted);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease;
+}
+.chain-step.active .chain-detail { max-height: 200px; }
+
+/* ── ANATOMY SVG DIAGRAM ── */
+.diagram-container {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.diagram-svg-wrap { flex: 0 0 280px; }
+.diagram-svg-wrap svg { width: 100%; display: block; }
+
+.diagram-legend { flex: 1; min-width: 200px; }
+
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.7rem 0.6rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .2s;
+  margin-bottom: 0.3rem;
+}
+.legend-item:hover { background: var(--red-light); }
+.legend-item.active { background: var(--red-light); }
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.legend-title { font-weight: 600; font-size: 0.85rem; color: var(--ink); }
+.legend-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; line-height: 1.4; }
+
+/* ── CAUSES CARDS ── */
+.causes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.cause-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--red);
+  border-radius: 4px;
+  padding: 1.3rem 1.1rem;
+}
+
+.cause-icon { font-size: 1.8rem; margin-bottom: 0.6rem; display: block; }
+.cause-title { font-family: 'Unbounded', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; line-height: 1.3; }
+.cause-text { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+/* ── AUDIENCE CONTENT ── */
+.for-parents { display: block; }
+.for-specialists { display: none; }
+body.specialists .for-parents { display: none; }
+body.specialists .for-specialists { display: block; }
+
+/* ── REHAB TABLE ── */
+.rehab-list { margin: 2rem 0; display: flex; flex-direction: column; gap: 0.8rem; }
+
+.rehab-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  align-items: start;
+}
+@media (max-width: 600px) { .rehab-item { grid-template-columns: 1fr; } }
+
+.rehab-method {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--blue);
+  line-height: 1.4;
+}
+
+.rehab-desc { font-size: 0.88rem; color: var(--muted); }
+.rehab-desc strong { color: var(--ink); }
+
+/* ── SIGNS CHECKLIST ── */
+.checklist { margin: 1.5rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+
+.check-item {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  padding: 0.8rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+.check-icon { color: var(--red); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+.alert-box {
+  background: var(--red-light);
+  border-left: 3px solid var(--red);
+  border-radius: 2px;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.alert-box strong { color: var(--red); display: block; margin-bottom: 0.3rem; }
+
+.info-box {
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
+  border-radius: 2px;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.info-box strong { color: var(--blue); display: block; margin-bottom: 0.3rem; }
+
+/* ── QUIZ ── */
+.quiz-wrap { max-width: 640px; }
+
+.quiz-prog { display: flex; gap: 0.4rem; margin-bottom: 2rem; }
+.qp { flex: 1; height: 2px; background: var(--rule); transition: background .3s; }
+.qp.done { background: var(--green); }
+.qp.cur { background: var(--red); }
+
+.quiz-q {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.qopt {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all .2s;
+  text-align: left;
+  color: var(--ink);
+  font-family: 'Golos Text', sans-serif;
+}
+.qopt:hover { border-color: var(--red); background: var(--red-light); }
+.qopt.correct { background: var(--green-light); border-color: var(--green); color: var(--green); }
+.qopt.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); }
+.qopt:disabled { pointer-events: none; }
+
+.qfb {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 3px;
+  font-size: 0.86rem;
+  min-height: 48px;
+}
+.qfb.ok { background: var(--green-light); color: var(--green); }
+.qfb.no { background: var(--red-light); color: var(--red); }
+
+.btn-next {
+  margin-top: 1rem;
+  padding: 0.7rem 1.6rem;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-radius: 2px;
+  display: none;
+  transition: opacity .2s;
+}
+.btn-next:hover { opacity: 0.8; }
+.btn-next.show { display: inline-block; }
+
+.quiz-result { display: none; text-align: center; padding: 2rem 0; }
+.quiz-result.show { display: block; }
+.res-score { font-family: 'Unbounded', sans-serif; font-size: 3rem; font-weight: 700; color: var(--red); }
+.res-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+.res-msg { font-size: 1rem; color: var(--ink); margin-top: 1.2rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+.btn-retry {
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+/* ── SOURCE ── */
+.source-line {
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 0.5rem;
+  margin-top: 2rem;
+}
+.source-line em { font-style: normal; color: var(--red); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: #5A5048;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+footer strong { color: #F7F3EE; }
+
+/* ── FADE ── */
+.fade { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
+.fade.in { opacity: 1; transform: none; }
+
+/* alt section bg */
+.section.alt { background: #EFEBE5; }
+</style>
+</head>
+<body>
+
+<!-- AUDIENCE BAR -->
+<div class="audience-bar">
+  <span class="aud-label">Читаю как:</span>
+  <button class="aud-btn active" onclick="setAud('parents')">Родитель</button>
+  <button class="aud-btn" onclick="setAud('specialists')">Специалист</button>
+</div>
+
+<!-- SIDE NAV -->
+<nav class="sidenav" id="sidenav">
+  <div class="snav-item active" onclick="goTo(0)"><div class="snav-dot"></div><span class="snav-text">Введение</span></div>
+  <div class="snav-item" onclick="goTo(1)"><div class="snav-dot"></div><span class="snav-text">Анатомия</span></div>
+  <div class="snav-item" onclick="goTo(2)"><div class="snav-dot"></div><span class="snav-text">Причины</span></div>
+  <div class="snav-item" onclick="goTo(3)"><div class="snav-dot"></div><span class="snav-text">Механизм</span></div>
+  <div class="snav-item" onclick="goTo(4)"><div class="snav-dot"></div><span class="snav-text">Диагностика</span></div>
+  <div class="snav-item" onclick="goTo(5)"><div class="snav-dot"></div><span class="snav-text">Реабилитация</span></div>
+  <div class="snav-item" onclick="goTo(6)"><div class="snav-dot"></div><span class="snav-text">Родителям</span></div>
+  <div class="snav-item" onclick="goTo(7)"><div class="snav-dot"></div><span class="snav-text">Викторина</span></div>
+</nav>
+
+<!-- S0: HERO -->
+<section class="section" id="s0">
+  <div class="section-inner">
+    <p class="hero-eyebrow">Детская неврология · Физиотерапия · Речевое развитие</p>
+    <h1>Венозный отток сосудов шеи и головы —<em>и речь вашего ребёнка</em></h1>
+    <p class="hero-sub">Как нарушение кровообращения в первые годы жизни влияет на развитие речи — и что с этим делать</p>
+
+    <div class="hero-authors">
+      <div class="author-tag">
+        <div class="author-name">А. Ф. Тумашенко</div>
+        <div class="author-role">Невролог, заслуженный врач РФ<br>МПК «Прогноз», Санкт-Петербург</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="author-tag">
+        <div class="author-name">С. И. Зинченко</div>
+        <div class="author-role">Физиотерапевт<br>Детский неврологический центр</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="author-tag">
+        <div class="author-name">Современные данные</div>
+        <div class="author-role">Исследования 2017–2024<br>Лечащий врач, PubMed, ВОЗ</div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">↓ прокрути вниз</div>
+  </div>
+</section>
+
+<!-- S1: АНАТОМИЯ -->
+<section class="section alt" id="s1">
+  <div class="section-inner fade">
+    <p class="section-num">01 · Анатомия</p>
+    <h2>Венозная система головы и шеи</h2>
+    <div class="rule"></div>
+
+    <div class="for-parents">
+      <p>Кровь приносит кислород в мозг по артериям — это знают все. Но есть и обратный путь: использованная кровь должна <strong>уйти</strong> из черепа по венам. Если этот отток нарушен, мозг «перегревается» и работает хуже.</p>
+      <p>У детей шея — самое уязвимое звено этой системы. Именно здесь проходят главные «дренажные» сосуды.</p>
+    </div>
+    <div class="for-specialists">
+      <p>Венозный дренаж головного мозга осуществляется через поверхностные и глубокие вены в систему венозных синусов твёрдой мозговой оболочки, откуда кровь поступает во внутренние яремные вены. Параллельный путь — позвоночные венозные сплетения.</p>
+      <p>Асимметрия оттока — частая норма анатомии, однако при функциональных нарушениях шейного отдела она усугубляется и приобретает клиническое значение.</p>
+    </div>
+
+    <div class="diagram-container">
+      <div class="diagram-svg-wrap">
+        <svg viewBox="0 0 240 380" xmlns="http://www.w3.org/2000/svg">
+          <!-- head -->
+          <ellipse cx="120" cy="55" rx="52" ry="50" fill="none" stroke="#D8CFC6" stroke-width="1.5"/>
+          <!-- brain hint -->
+          <ellipse cx="120" cy="50" rx="36" ry="32" fill="rgba(192,57,43,0.06)" stroke="none"/>
+          <!-- superior sagittal sinus -->
+          <path d="M 80 20 Q 120 10 160 20" fill="none" stroke="#C0392B" stroke-width="2.5" id="svg-sss" opacity="0.5"/>
+          <!-- transverse sinuses -->
+          <path d="M 80 85 Q 120 92 160 85" fill="none" stroke="#C0392B" stroke-width="2" id="svg-ts" opacity="0.5"/>
+          <!-- internal jugular veins -->
+          <line x1="80" y1="100" x2="72" y2="220" stroke="#1A4A7A" stroke-width="3" id="svg-ijv-l" opacity="0.5"/>
+          <line x1="160" y1="100" x2="168" y2="220" stroke="#1A4A7A" stroke-width="3" id="svg-ijv-r" opacity="0.5"/>
+          <!-- vertebral veins -->
+          <line x1="112" y1="105" x2="108" y2="220" stroke="#B45309" stroke-width="1.5" stroke-dasharray="4,3" id="svg-vv" opacity="0.5"/>
+          <line x1="128" y1="105" x2="132" y2="220" stroke="#B45309" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+          <!-- neck outline -->
+          <path d="M 85 100 L 72 230 M 155 100 L 168 230" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <!-- vertebrae hints -->
+          <rect x="104" y="115" width="32" height="10" rx="2" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <rect x="104" y="135" width="32" height="10" rx="2" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <rect x="104" y="155" width="32" height="10" rx="2" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <rect x="104" y="175" width="32" height="10" rx="2" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <rect x="104" y="195" width="32" height="10" rx="2" fill="none" stroke="#D8CFC6" stroke-width="1"/>
+          <!-- subclavian -->
+          <path d="M 72 230 Q 60 250 40 255 M 168 230 Q 180 250 200 255" fill="none" stroke="#1A4A7A" stroke-width="2.5" opacity="0.5"/>
+          <!-- Broca area hint -->
+          <circle cx="92" cy="48" r="8" fill="rgba(26,74,122,0.12)" stroke="#1A4A7A" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="92" y="51" text-anchor="middle" font-size="6" fill="#1A4A7A">Б</text>
+          <!-- Wernicke -->
+          <circle cx="148" cy="55" r="8" fill="rgba(26,74,122,0.12)" stroke="#1A4A7A" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="148" y="58" text-anchor="middle" font-size="6" fill="#1A4A7A">В</text>
+
+          <!-- Labels -->
+          <text x="122" y="14" text-anchor="middle" font-size="7.5" fill="#C0392B" font-family="sans-serif">Верхний сагиттальный синус</text>
+          <text x="60" y="165" text-anchor="end" font-size="7.5" fill="#1A4A7A" font-family="sans-serif">Яремная</text>
+          <text x="60" y="174" text-anchor="end" font-size="7.5" fill="#1A4A7A" font-family="sans-serif">вена</text>
+          <text x="100" y="145" text-anchor="end" font-size="7" fill="#B45309" font-family="sans-serif">Позв.</text>
+          <text x="100" y="153" text-anchor="end" font-size="7" fill="#B45309" font-family="sans-serif">вены</text>
+          <text x="78" y="45" text-anchor="end" font-size="7" fill="#1A4A7A" font-family="sans-serif">Брока</text>
+          <text x="166" y="52" text-anchor="start" font-size="7" fill="#1A4A7A" font-family="sans-serif">Вернике</text>
+        </svg>
+      </div>
+
+      <div class="diagram-legend">
+        <p style="font-size:0.78rem; color:var(--muted); margin-bottom:1rem;">Нажми на элемент — узнай его роль</p>
+        <div class="legend-item" onclick="highlightSvg('sss', this)">
+          <div class="legend-dot" style="background:#C0392B"></div>
+          <div>
+            <div class="legend-title">Венозные синусы</div>
+            <div class="legend-desc">Главные «коллекторы» крови от мозга. Расположены в твёрдой мозговой оболочке. При нарушении оттока давление в них повышается.</div>
+          </div>
+        </div>
+        <div class="legend-item" onclick="highlightSvg('ijv-l', this)">
+          <div class="legend-dot" style="background:#1A4A7A"></div>
+          <div>
+            <div class="legend-title">Внутренние яремные вены</div>
+            <div class="legend-desc">Главный путь оттока крови из черепа. Проходят вдоль шеи. Наиболее уязвимы при нестабильности и гипертонусе мышц шеи.</div>
+          </div>
+        </div>
+        <div class="legend-item" onclick="highlightSvg('vv', this)">
+          <div class="legend-dot" style="background:#B45309"></div>
+          <div>
+            <div class="legend-title">Позвоночные вены</div>
+            <div class="legend-desc">Резервный путь оттока вдоль позвоночника. При патологии шейного отдела страдают одновременно с яремными венами.</div>
+          </div>
+        </div>
+        <div class="legend-item" onclick="highlightSvg('', this, true)">
+          <div class="legend-dot" style="background:#1A4A7A; opacity:0.5; border: 2px dashed #1A4A7A;"></div>
+          <div>
+            <div class="legend-title">Зоны речи (Брока и Вернике)</div>
+            <div class="legend-desc">Корковые центры речи. Получают кровоснабжение от средней мозговой артерии, венозный отток — через поверхностные вены и синусы.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-line">Источник: <em>А. Ф. Тумашенко</em>, МПК «Прогноз»; Цоколов А.В. «Венозная дисциркуляция в детском и подростковом возрасте»</div>
+  </div>
+</section>
+
+<!-- S2: ПРИЧИНЫ -->
+<section class="section" id="s2">
+  <div class="section-inner fade">
+    <p class="section-num">02 · Причины</p>
+    <h2>Почему нарушается венозный отток у детей</h2>
+    <div class="rule"></div>
+
+    <div class="for-parents">
+      <p>Чаще всего проблема начинается ещё при рождении — или сразу после него. Шея новорождённого — самое уязвимое место при родах.</p>
+    </div>
+    <div class="for-specialists">
+      <p>Нарушения венозного оттока у детей носят преимущественно функциональный, обратимый характер. Ключевые этиологические факторы в порядке клинической значимости:</p>
+    </div>
+
+    <div class="causes-grid">
+      <div class="cause-card">
+        <span class="cause-icon">🤱</span>
+        <div class="cause-title">Перинатальная травма шейного отдела</div>
+        <div class="cause-text for-parents">При трудных родах шея ребёнка может быть перекручена или перерастянута. Это приводит к нестабильности позвонков и нарушению мышечного тонуса.</div>
+        <div class="cause-text for-specialists">Натальная травма C1–C2 — наиболее частая причина. Формирует нестабильность краниовертебрального перехода, патологическую подвижность позвонков, изменение тонуса паравертебральных мышц.</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-icon">💪</span>
+        <div class="cause-title">Гипертонус или гипотонус мышц шеи</div>
+        <div class="cause-text for-parents">Слишком напряжённые или, наоборот, слабые мышцы шеи меняют положение позвонков и давят на проходящие рядом сосуды. Отток крови из головы затрудняется.</div>
+        <div class="cause-text for-specialists">Дисбаланс мышечного тонуса (гипер- или гипотония) нарушает нормальную биомеханику шейного отдела. Компрессия или тракция яремных вен приводит к асимметричному нарушению оттока.</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-icon">⚖️</span>
+        <div class="cause-title">Асимметрия — типичная картина</div>
+        <div class="cause-text for-parents">Нарушение чаще возникает с одной стороны — там, где были бо́льшие нагрузки при родах или где мышцы напряжены сильнее. Именно поэтому при диагностике так важны функциональные пробы.</div>
+        <div class="cause-text for-specialists">По данным УЗДГ, нарушение кровотока преимущественно одностороннее. Функциональные пробы с поворотами головы позволяют выявить позиционную зависимость нарушения и дифференцировать компрессионный механизм от сосудистой аномалии.</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-icon">🧬</span>
+        <div class="cause-title">Аномалии развития сосудов</div>
+        <div class="cause-text for-parents">Иногда сосуды изначально устроены чуть иначе — например, один синус уже другого. Это врождённая особенность, которая сама по себе не болезнь, но в сочетании с другими факторами может давать симптомы.</div>
+        <div class="cause-text for-specialists">Гипоплазия поперечных и сигмовидных синусов — нередкая находка при МРТ. По данным «Лечащего врача» (2017), у 112 детей с выраженными нарушениями венозной гемодинамики гипоплазия поперечных синусов выявлена в 100% случаев.</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-icon">🔥</span>
+        <div class="cause-title">Воспалительные заболевания</div>
+        <div class="cause-text for-parents">Частые отиты, тонзиллиты, синуситы — не просто «ухо болит». Воспаление в этой зоне может нарушать венозный отток из-за отёка окружающих тканей.</div>
+        <div class="cause-text for-specialists">Хронические воспаления носоглотки, ЛОР-органов — частый провоцирующий фактор. Возможна также флебогипертензия при тромбозе синусов как осложнение менингита или синусита.</div>
+      </div>
+      <div class="cause-card">
+        <span class="cause-icon">🪑</span>
+        <div class="cause-title">Постуральные факторы</div>
+        <div class="cause-text for-parents">Длительное вынужденное положение головы — у экранов, во сне — формирует функциональный блок шейного отдела и нарушает отток.</div>
+        <div class="cause-text for-specialists">Функциональная нестабильность на фоне длительного статического положения головы. Резкий поворот головы, запрокидывание — провоцирующие факторы срыва компенсации кровообращения.</div>
+      </div>
+    </div>
+
+    <div class="source-line">Источник: <em>А. Ф. Тумашенко</em>; НейроСпектр (2025); Лечащий врач №05/17</div>
+  </div>
+</section>
+
+<!-- S3: МЕХАНИЗМ ВЛИЯНИЯ НА РЕЧЬ -->
+<section class="section alt" id="s3">
+  <div class="section-inner fade">
+    <p class="section-num">03 · Механизм</p>
+    <h2>Как венозный застой влияет на речь</h2>
+    <div class="rule"></div>
+
+    <div class="for-parents">
+      <p>Это цепочка событий — каждое звено влечёт следующее. Нажми на каждый шаг, чтобы понять детали.</p>
+    </div>
+    <div class="for-specialists">
+      <p>Патогенетическая цепь. Нажмите на каждый этап для клинических деталей.</p>
+    </div>
+
+    <div class="chain" id="chain">
+      <div class="chain-step" onclick="toggleChain(this)">
+        <div class="chain-num">01</div>
+        <div>
+          <div class="chain-title">Нарушение венозного оттока из черепа</div>
+          <div class="chain-detail for-parents">Кровь не успевает уходить из головного мозга с нужной скоростью. Это может быть асимметричным — сильнее с одной стороны. Мозг получает меньше свежей крови с кислородом и питательными веществами.</div>
+          <div class="chain-detail for-specialists">Флебогипертензия в системе внутричерепных синусов. Замедление линейной скорости кровотока по глубоким венам мозга. Нарушение артериовенозного градиента давления снижает эффективность микроциркуляции.</div>
+        </div>
+      </div>
+      <div class="chain-step" onclick="toggleChain(this)">
+        <div class="chain-num">02</div>
+        <div>
+          <div class="chain-title">Повышение внутричерепного давления</div>
+          <div class="chain-detail for-parents">Когда кровь «застаивается» в черепе, давление внутри повышается. Ребёнок может жаловаться на головную боль по утрам, быть вялым после сна, капризным. У грудничков это проявляется срыгиваниями и беспокойством.</div>
+          <div class="chain-detail for-specialists">Венозный застой нарушает резорбцию ликвора (CSF) в паутинных грануляциях — следствием является ликворная гипертензия. Утренняя цефалгия, вялость после сна — классические проявления венозной ВЧГ. Даже умеренное повышение ВЧД нарушает работу корковых нейронов.</div>
+        </div>
+      </div>
+      <div class="chain-step" onclick="toggleChain(this)">
+        <div class="chain-num">03</div>
+        <div>
+          <div class="chain-title">Хроническая гипоксия речевых зон</div>
+          <div class="chain-detail for-parents">Мозг ребёнка особенно чувствителен к нехватке кислорода. Речевые центры — зоны Брока (произношение) и Вернике (понимание) — требуют постоянного хорошего кровоснабжения для нормального созревания.</div>
+          <div class="chain-detail for-specialists">Зоны Брока (44–45 поля по Бродману) и Вернике (22 поле) относятся к наиболее метаболически активным корковым регионам. Хроническая дисциркуляция нарушает миелинизацию нервных путей в критические периоды формирования речи (1–3 года).</div>
+        </div>
+      </div>
+      <div class="chain-step" onclick="toggleChain(this)">
+        <div class="chain-num">04</div>
+        <div>
+          <div class="chain-title">Задержка созревания нейронных сетей речи</div>
+          <div class="chain-detail for-parents">В первые 3 года жизни мозг закладывает «проводку» для речи. Если кровоснабжение в этот период нарушено, нейронные связи формируются медленнее или с дефицитом. Ребёнок позже начинает говорить, хуже строит фразы.</div>
+          <div class="chain-detail for-specialists">Нарушение процессов миелинизации и синаптогенеза в речевых сетях в критические периоды нейропластичности. Данные 2024 года (J. Neuroscience) показывают, что нарушение кортикального отслеживания речи у детей с расстройствами языкового развития имеет нейрофизиологическую основу — снижение амплитудно-частотного ответа слуховой коры.</div>
+        </div>
+      </div>
+      <div class="chain-step" onclick="toggleChain(this)">
+        <div class="chain-num">05</div>
+        <div>
+          <div class="chain-title">Клинические проявления</div>
+          <div class="chain-detail for-parents">Задержка появления первых слов и фраз, бедный словарный запас, трудности с произношением, сниженное внимание, быстрая утомляемость на занятиях — всё это может быть следствием нарушенного кровоснабжения мозга, а не только «нейропсихологической» проблемы.</div>
+          <div class="chain-detail for-specialists">Полиморфная клиника: задержка речевого развития, дизартрия, алалия, СДВГ-подобная симптоматика, снижение концентрации внимания. Важна дифференциальная диагностика с первичными речевыми расстройствами. Нейровизуализация и УЗДГ позволяют установить сосудистый компонент.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Важный принцип</strong>
+      Нарушение венозного оттока — один из факторов в комплексе причин задержки речи. Он поддаётся коррекции, что делает его особенно важным для ранней диагностики и реабилитации.
+    </div>
+
+    <div class="source-line">Источник: <em>А. Ф. Тумашенко</em>; J. Neuroscience 2024; клинический опыт физиотерапевта</div>
+  </div>
+</section>
+
+<!-- S4: ДИАГНОСТИКА -->
+<section class="section" id="s4">
+  <div class="section-inner fade">
+    <p class="section-num">04 · Диагностика</p>
+    <h2>Как выявляют нарушение оттока</h2>
+    <div class="rule"></div>
+
+    <div class="for-parents">
+      <p>Если вы подозреваете проблему — не ждите. Диагностика неинвазивна и безопасна для ребёнка любого возраста.</p>
+    </div>
+    <div class="for-specialists">
+      <p>Алгоритм обследования при подозрении на церебральную венозную дисциркуляцию у ребёнка с задержкой речевого развития.</p>
+    </div>
+
+    <div class="rehab-list">
+      <div class="rehab-item">
+        <div class="rehab-method">УЗДГ сосудов шеи и головы</div>
+        <div class="rehab-desc">
+          <strong>Основной метод.</strong>
+          <span class="for-parents"> Ультразвуковое исследование сосудов — безопасно, не требует облучения. Показывает скорость и симметричность кровотока в яремных и позвоночных венах.</span>
+          <span class="for-specialists"> Транскраниальная допплерография + УЗДГ экстракраниальных сосудов. Оценивают ЛСК по яремным венам, позвоночным венам, венозным синусам. Функциональные пробы с поворотами головы выявляют позиционную компрессию.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method">Функциональные пробы</div>
+        <div class="rehab-desc">
+          <strong>Ключевой элемент обследования.</strong>
+          <span class="for-parents"> Во время УЗИ ребёнка просят повернуть голову в разные стороны. Это позволяет выявить, при каком положении кровоток нарушается.</span>
+          <span class="for-specialists"> Пробы с ротацией, флексией и экстензией шейного отдела во время УЗДГ. Позволяют выявить динамическую компрессию сосудов и функциональный характер нарушения — принципиально для выбора тактики лечения.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method">Рентген шейного отдела</div>
+        <div class="rehab-desc">
+          <strong>Структурная оценка.</strong>
+          <span class="for-parents"> Снимки позвоночника с функциональными пробами показывают нестабильность позвонков, которая может быть причиной нарушения кровотока.</span>
+          <span class="for-specialists"> Функциональные спондилограммы C1–C7. Оценка нестабильности (смещение более 2 мм), угловой деформации, признаков родовой травмы атланто-аксиального сочленения.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method">МРТ / МР-венография</div>
+        <div class="rehab-desc">
+          <strong>При показаниях.</strong>
+          <span class="for-parents"> Магнитно-резонансная томография показывает состояние мозга и крупных сосудов без рентгеновского облучения. Назначается, если нужно исключить структурные изменения.</span>
+          <span class="for-specialists"> МРТ с MR-венографией при подозрении на гипоплазию синусов, аномалию Арнольда–Киари, тромбоз синусов. Позволяет верифицировать анатомическую причину дисциркуляции.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method">Реоэнцефалография</div>
+        <div class="rehab-desc">
+          <strong>Функциональная оценка.</strong>
+          <span class="for-parents"> Дополнительный метод, оценивающий тонус и наполнение мозговых сосудов. Используется в комплексе с другими исследованиями.</span>
+          <span class="for-specialists"> РЭГ — скрининговый метод оценки венозного компонента мозгового кровообращения. Признаки венозной дисциркуляции: увеличение диастолической волны, замедление венозного оттока. Информативность ограничена, используется как дополнение к УЗДГ.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <strong>Клинический ключ</strong>
+      Типичная картина — асимметричное нарушение, чаще с одной стороны. Без функциональных проб при УЗДГ нарушение может быть пропущено, так как в состоянии покоя отток может быть компенсирован.
+    </div>
+
+    <div class="source-line">Источник: <em>А. Ф. Тумашенко</em>; клинический опыт физиотерапевта МПК «Прогноз»; Лечащий врач №05/17</div>
+  </div>
+</section>
+
+<!-- S5: РЕАБИЛИТАЦИЯ -->
+<section class="section alt" id="s5">
+  <div class="section-inner fade">
+    <p class="section-num">05 · Реабилитация</p>
+    <h2>Методы коррекции</h2>
+    <div class="rule"></div>
+
+    <div class="for-parents">
+      <p>Хорошая новость: при своевременном выявлении большинство нарушений венозного оттока у детей хорошо поддаются коррекции. Лечение комплексное — несколько методов вместе дают лучший результат, чем каждый по отдельности.</p>
+    </div>
+    <div class="for-specialists">
+      <p>Реабилитация носит этапный характер. Выбор методов определяется выраженностью нарушения, возрастом пациента и этиологическим фактором. Приведены методы с наибольшей клинической эффективностью по данным практики МПК «Прогноз».</p>
+    </div>
+
+    <div class="rehab-list">
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--red);">Физиотерапия</div>
+        <div class="rehab-desc">
+          <span class="for-parents">Физиотерапевтические процедуры улучшают кровообращение, снимают мышечный спазм и нормализуют тонус сосудов. Применяются курсами под контролем врача.</span>
+          <span class="for-specialists">Методы физиотерапии с доказанной клинической эффективностью при церебральной венозной дисциркуляции: лекарственный электрофорез, магнитотерапия, лазеротерапия на воротниковую зону, дарсонвализация. Курс 10–15 процедур, 2–3 курса в год.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--red);">Электрофорез с эуфиллином и магнезией</div>
+        <div class="rehab-desc">
+          <strong>По назначению врача-невролога.</strong>
+          <span class="for-parents"> Лекарство доставляется непосредственно в зону шеи с помощью слабого электрического тока. Эуфиллин расширяет сосуды и улучшает кровоток, магнезия снимает спазм.</span>
+          <span class="for-specialists"> Эндоназальный электрофорез или электрофорез по Ратнеру (C3–C4 / воротниковая зона). Эуфиллин — спазмолитик, расширяет сосуды, улучшает микроциркуляцию. Магния сульфат — снижает тонус гладкой мускулатуры сосудов. Метод А. Ю. Ратнера применяется в практике МПК «Прогноз» как базовый при перинатальных поражениях ЦНС.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--red);">Медицинский массаж</div>
+        <div class="rehab-desc">
+          <span class="for-parents">Профессиональный массаж воротниковой зоны снимает гипертонус мышц шеи, восстанавливает нормальное положение позвонков и улучшает отток крови. Важно: только у специалиста — самомассаж шеи у детей недопустим.</span>
+          <span class="for-specialists">Дифференцированный массаж в зависимости от тонуса: при гипертонусе — расслабляющие техники на паравертебральные мышцы C1–Th2; при гипотонии — стимулирующие. Включает приёмы постизометрической релаксации. Обязательна нейтральная укладка головы во время процедуры.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--red);">Мануальные техники</div>
+        <div class="rehab-desc">
+          <span class="for-parents">Мягкие мануальные техники помогают восстановить нормальное положение позвонков и снять блоки, мешающие кровотоку. Применяются только сертифицированным специалистом, только при отсутствии противопоказаний.</span>
+          <span class="for-specialists">Мягкотканные техники, миофасциальный релиз, мобилизация краниовертебрального перехода. Жёсткие манипуляции на шейном отделе у детей противопоказаны. Показана работа с твёрдой мозговой оболочкой в рамках краниосакральных подходов при компетентном применении.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--green);">Логопедическая работа</div>
+        <div class="rehab-desc">
+          <span class="for-parents">Параллельно с улучшением кровообращения — обязательная работа с логопедом. Мозг получает лучшее питание, а логопед помогает «запустить» речевые навыки. Комплекс работает значительно эффективнее, чем каждый метод отдельно.</span>
+          <span class="for-specialists">Нейрологопедическая работа — обязательный компонент реабилитации. Улучшение церебрального кровотока создаёт нейропластичный «фон» для более эффективного усвоения речевых паттернов. Данные 2024 (Medicine) подтверждают: раннее сочетание логопедической и сосудистой терапии достоверно улучшает индекс психомоторного развития.</span>
+        </div>
+      </div>
+      <div class="rehab-item">
+        <div class="rehab-method" style="color:var(--blue);">Медикаментозная поддержка</div>
+        <div class="rehab-desc">
+          <strong>Только по назначению невролога.</strong>
+          <span class="for-parents"> Врач может назначить препараты, улучшающие кровообращение мозга и снижающие внутричерепное давление. Самолечение недопустимо.</span>
+          <span class="for-specialists">Венотоники (эскузан, детралекс) при выраженной флебогипертензии. Ноотропы (пантогам, кортексин) — для улучшения нейрометаболизма в речевых зонах. Сосудистые препараты (циннаризин, кавинтон). Схема определяется индивидуально.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-line">Источник: <em>А. Ф. Тумашенко</em>; клинический опыт физиотерапевта; Лечащий врач №05/17; Medicine 2024</div>
+  </div>
+</section>
+
+<!-- S6: РОДИТЕЛЯМ -->
+<section class="section" id="s6">
+  <div class="section-inner fade">
+    <p class="section-num">06 · Родителям</p>
+    <h2>На что обратить внимание</h2>
+    <div class="rule"></div>
+
+    <p>Ранняя диагностика — ключ к успеху. Чем раньше выявлено нарушение, тем эффективнее реабилитация.</p>
+
+    <p style="margin-top:1.5rem; font-weight:600; color:var(--ink);">Признаки, при которых стоит обратиться к неврологу:</p>
+
+    <div class="checklist">
+      <div class="check-item"><span class="check-icon">⚠</span>Ребёнок не говорит первых слов к 1 году или фраз к 2 годам</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Утренние головные боли, вялость после сна, срыгивания у грудничков</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Быстрая утомляемость, сниженное внимание, раздражительность</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Кривошея, привычный наклон или поворот головы в одну сторону</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Трудные роды в анамнезе (стремительные, затяжные, с использованием щипцов или вакуума)</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Нарушение координации движений, неустойчивость при ходьбе</div>
+      <div class="check-item"><span class="check-icon">⚠</span>Частые ЛОР-заболевания в сочетании с задержкой речи</div>
+    </div>
+
+    <div class="alert-box">
+      <strong>Важно помнить</strong>
+      Задержка речи — не приговор и не «само пройдёт». Если причина в нарушении кровообращения, она устранима. Обратитесь к детскому неврологу и попросите направление на УЗДГ сосудов шеи и головы с функциональными пробами.
+    </div>
+
+    <p style="font-weight:600; margin-top:2rem;">Что вы можете делать дома:</p>
+    <div class="checklist">
+      <div class="check-item"><span class="check-icon" style="color:var(--green);">✓</span>Следить за позой ребёнка — голова не должна постоянно быть в одном положении</div>
+      <div class="check-item"><span class="check-icon" style="color:var(--green);">✓</span>Ограничивать время у экрана, следить за положением головы при просмотре</div>
+      <div class="check-item"><span class="check-icon" style="color:var(--green);">✓</span>Активные игры, плавание — улучшают общий мышечный тонус и кровообращение</div>
+      <div class="check-item"><span class="check-icon" style="color:var(--green);">✓</span>Регулярно разговаривать с ребёнком — читать вслух, петь, называть предметы</div>
+      <div class="check-item"><span class="check-icon" style="color:var(--green);">✓</span>Выполнять назначенные физиотерапевтом упражнения курсами</div>
+    </div>
+
+    <div class="source-line">Источник: клинический опыт физиотерапевта; <em>А. Ф. Тумашенко</em></div>
+  </div>
+</section>
+
+<!-- S7: ВИКТОРИНА -->
+<section class="section alt" id="s7">
+  <div class="section-inner fade">
+    <p class="section-num">07 · Самопроверка</p>
+    <h2>Викторина</h2>
+    <div class="rule"></div>
+    <p style="margin-bottom:2rem;" class="for-parents">Проверьте, что вы запомнили — 6 вопросов.</p>
+    <p style="margin-bottom:2rem;" class="for-specialists">Клинический тест — 6 вопросов для специалистов и родителей.</p>
+
+    <div class="quiz-wrap">
+      <div class="quiz-prog" id="qprog"></div>
+      <div id="qcontainer"></div>
+      <div class="quiz-result" id="qresult">
+        <div class="res-score" id="rscore"></div>
+        <div class="res-label">из 6 правильных ответов</div>
+        <div class="res-msg" id="rmsg"></div>
+        <button class="btn-retry" onclick="initQuiz()">Пройти ещё раз</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Венозный отток и речевое развитие ребёнка</strong><br>
+  На основе книги А. Ф. Тумашенко · МПК «Прогноз», Санкт-Петербург<br>
+  Клинический опыт: Зинченко Станислав Игоревич, физиотерапевт<br><br>
+  <span style="font-size:0.7rem; color:#3A3330;">Материал носит образовательный характер и не заменяет консультацию врача</span>
+</footer>
+
+<script>
+// ── AUDIENCE ────────────────────────────────────────────────────────────
+function setAud(mode) {
+  document.querySelectorAll('.aud-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0 && mode === 'parents') || (i === 1 && mode === 'specialists'));
+  });
+  if (mode === 'specialists') document.body.classList.add('specialists');
+  else document.body.classList.remove('specialists');
+}
+
+// ── SVG HIGHLIGHT ────────────────────────────────────────────────────────
+function highlightSvg(id, el, isBroca) {
+  document.querySelectorAll('.legend-item').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+  const ids = ['sss', 'ts', 'ijv-l', 'ijv-r', 'vv'];
+  ids.forEach(i => {
+    const el2 = document.getElementById('svg-' + i);
+    if (el2) el2.style.opacity = '0.2';
+  });
+  if (isBroca) {
+    ids.forEach(i => { const e = document.getElementById('svg-' + i); if(e) e.style.opacity = '0.2'; });
+  } else if (id === 'sss') {
+    ['sss', 'ts'].forEach(i => { const e = document.getElementById('svg-' + i); if(e) e.style.opacity = '1'; });
+  } else if (id === 'ijv-l') {
+    ['ijv-l', 'ijv-r'].forEach(i => { const e = document.getElementById('svg-' + i); if(e) e.style.opacity = '1'; });
+  } else if (id === 'vv') {
+    ['vv'].forEach(i => { const e = document.getElementById('svg-' + i); if(e) e.style.opacity = '1'; });
+  }
+}
+
+// ── CHAIN ────────────────────────────────────────────────────────────────
+function toggleChain(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.chain-step').forEach(s => s.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+// ── NAV ──────────────────────────────────────────────────────────────────
+const sects = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.snav-item');
+
+function goTo(i) { sects[i].scrollIntoView({ behavior: 'smooth' }); }
+
+const sObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = [...sects].indexOf(e.target);
+      navItems.forEach((n, j) => n.classList.toggle('active', j === i));
+    }
+  });
+}, { threshold: 0.4 });
+sects.forEach(s => sObs.observe(s));
+
+// ── FADE ─────────────────────────────────────────────────────────────────
+const fades = document.querySelectorAll('.fade');
+const fObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+fades.forEach(f => fObs.observe(f));
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────
+const qs = [
+  {
+    q: 'Какой главный путь венозного оттока из головного мозга у детей?',
+    opts: ['Позвоночные вены', 'Внутренние яремные вены', 'Наружные яремные вены', 'Синус-дренаж'],
+    c: 1,
+    exp: 'Внутренние яремные вены — главный коллектор крови из синусов твёрдой мозговой оболочки. Именно они наиболее уязвимы при нарушениях шейного отдела позвоночника.'
+  },
+  {
+    q: 'Почему нарушение венозного оттока чаще асимметричное?',
+    opts: ['Мозг анатомически асимметричен', 'Нагрузка при родах и тонус мышц распределяются неравномерно', 'Одна яремная вена всегда меньше', 'Это случайность'],
+    c: 1,
+    exp: 'Родовая травма, кривошея и дисбаланс мышечного тонуса возникают преимущественно с одной стороны. Именно поэтому при диагностике обязательны функциональные пробы с поворотом головы в обе стороны.'
+  },
+  {
+    q: 'Какой метод диагностики является основным при подозрении на нарушение венозного оттока?',
+    opts: ['МРТ головного мозга', 'Электроэнцефалография', 'УЗДГ сосудов шеи и головы с функциональными пробами', 'Люмбальная пункция'],
+    c: 2,
+    exp: 'УЗДГ (ультразвуковая допплерография) — безопасный, доступный и информативный метод. Функциональные пробы во время исследования выявляют позиционную зависимость нарушения, которую нельзя обнаружить в покое.'
+  },
+  {
+    q: 'Каков механизм влияния венозного застоя на речь ребёнка?',
+    opts: ['Прямое повреждение голосовых связок', 'Флебогипертензия → повышение ВЧД → гипоксия речевых зон → задержка миелинизации', 'Нарушение слуха из-за давления на ухо', 'Влияние на мозжечок и координацию'],
+    c: 1,
+    exp: 'Венозный застой повышает внутричерепное давление, что нарушает микроциркуляцию в речевых зонах Брока и Вернике. В критические периоды нейропластичности (1–3 года) это замедляет созревание нейронных сетей речи.'
+  },
+  {
+    q: 'Электрофорез с эуфиллином по Ратнеру применяется при лечении потому что:',
+    opts: ['Эуфиллин укрепляет позвонки', 'Эуфиллин расширяет сосуды и улучшает кровоток, магнезия снимает сосудистый спазм', 'Ток стимулирует речевые зоны напрямую', 'Это стандарт при любых неврологических нарушениях'],
+    c: 1,
+    exp: 'Эуфиллин — спазмолитик и сосудорасширяющее средство, улучшает венозный отток и микроциркуляцию. Магния сульфат снижает тонус гладкой мускулатуры сосудов. Доставка через электрофорез создаёт депо препарата непосредственно в воротниковой зоне.'
+  },
+  {
+    q: 'Почему реабилитация эффективнее при комплексном подходе?',
+    opts: ['Больше процедур — дороже и значит лучше', 'Физиотерапия улучшает «нейропластичный фон», а логопед использует это окно для формирования речевых навыков', 'Это традиция, не имеющая научного обоснования', 'Достаточно только логопеда'],
+    c: 1,
+    exp: 'Улучшение мозгового кровообращения создаёт оптимальные условия для нейропластичности. В этот период мозг ребёнка наиболее восприимчив к речевой стимуляции — логопедическая работа даёт значительно лучший результат на фоне нормализованного кровотока.'
+  }
+];
+
+let curQ = 0, score = 0, answered = false;
+
+function initQuiz() {
+  curQ = 0; score = 0; answered = false;
+  document.getElementById('qresult').classList.remove('show');
+  document.getElementById('qcontainer').style.display = 'block';
+  renderQ();
+}
+
+function renderQ() {
+  answered = false;
+  const q = qs[curQ];
+  document.getElementById('qprog').innerHTML = qs.map((_, i) => {
+    let c = 'qp';
+    if (i < curQ) c += ' done';
+    if (i === curQ) c += ' cur';
+    return `<div class="${c}"></div>`;
+  }).join('');
+
+  document.getElementById('qcontainer').innerHTML = `
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts">
+      ${q.opts.map((o, i) => `<button class="qopt" onclick="pick(${i})" id="qo${i}">${o}</button>`).join('')}
+    </div>
+    <div class="qfb" id="qfb"></div>
+    <button class="btn-next" id="qnext" onclick="nextQ()">
+      ${curQ < qs.length - 1 ? 'Следующий вопрос →' : 'Посмотреть результат →'}
+    </button>
+  `;
+}
+
+function pick(idx) {
+  if (answered) return;
+  answered = true;
+  const q = qs[curQ];
+  const fb = document.getElementById('qfb');
+  document.querySelectorAll('.qopt').forEach((el, i) => {
+    if (i === q.c) el.classList.add('correct');
+    else if (i === idx) el.classList.add('wrong');
+    el.disabled = true;
+  });
+  if (idx === q.c) {
+    score++;
+    fb.className = 'qfb ok';
+    fb.innerHTML = '✓ Верно! ' + q.exp;
+  } else {
+    fb.className = 'qfb no';
+    fb.innerHTML = '✗ ' + q.exp;
+  }
+  document.getElementById('qnext').classList.add('show');
+}
+
+function nextQ() {
+  curQ++;
+  if (curQ >= qs.length) showResult();
+  else renderQ();
+}
+
+function showResult() {
+  document.getElementById('qcontainer').style.display = 'none';
+  document.getElementById('qprog').innerHTML = qs.map(() => `<div class="qp done"></div>`).join('');
+  const r = document.getElementById('qresult');
+  r.classList.add('show');
+  document.getElementById('rscore').textContent = `${score}/6`;
+  const msgs = [
+    'Материал сложный — пройдите ещё раз, уделяя внимание механизмам.',
+    'Хорошее начало! Обратите внимание на патогенез и методы диагностики.',
+    'Неплохо! Закрепите знания о механизмах влияния на речь.',
+    'Хорошо! Осталось уточнить детали реабилитации.',
+    'Очень хороший результат! Вы хорошо понимаете тему.',
+    'Отлично! Вы уверенно ориентируетесь в теме венозного оттока и речевого развития.',
+    'Превосходно! Профессиональный уровень знаний.'
+  ];
+  document.getElementById('rmsg').textContent = msgs[Math.min(score, 6)];
+}
+
+initQuiz();
+</script>
+</body>
+</html>
